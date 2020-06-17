@@ -1,60 +1,39 @@
-﻿namespace ETModel
+﻿namespace ET
 {
-	public static class Game
-	{
-		private static Scene scene;
+    public static class Game
+    {
+        public static EventSystem EventSystem
+        {
+            get
+            {
+                return EventSystem.Instance;
+            }
+        }
 
-		public static Scene Scene
-		{
-			get
-			{
-				if (scene != null)
-				{
-					return scene;
-				}
-				scene = new Scene();
-				scene.AddComponent<TimerComponent>();
-				return scene;
-			}
-		}
+        private static Scene scene;
 
-		private static EventSystem eventSystem;
+        public static Scene Scene
+        {
+            get
+            {
+                return scene ?? (scene = EntitySceneFactory.CreateScene(1, SceneType.Process, "Process"));
+            }
+        }
 
-		public static EventSystem EventSystem
-		{
-			get
-			{
-				return eventSystem ?? (eventSystem = new EventSystem());
-			}
-		}
-
-		private static ObjectPool objectPool;
-
-		public static ObjectPool ObjectPool
-		{
-			get
-			{
-				return objectPool ?? (objectPool = new ObjectPool());
-			}
-		}
-
-		private static Hotfix hotfix;
-
-		public static Hotfix Hotfix
-		{
-			get
-			{
-				return hotfix ?? (hotfix = new Hotfix());
-			}
-		}
-
-		public static void Close()
-		{
-			scene.Dispose();
-			eventSystem = null;
-			scene = null;
-			objectPool = null;
-			hotfix = null;
-		}
-	}
+        public static ObjectPool ObjectPool
+        {
+            get
+            {
+                return ObjectPool.Instance;
+            }
+        }
+		
+        public static void Close()
+        {
+            scene?.Dispose();
+            scene = null;
+            ObjectPool.Instance.Dispose();
+            EventSystem.Instance.Dispose();
+        }
+    }
 }

@@ -2,12 +2,12 @@
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
 
-namespace ETModel
+namespace ET
 {
     [AsyncMethodBuilder(typeof(AsyncETVoidMethodBuilder))]
     public struct ETVoid
     {
-        public void NoAwait()
+        public void Coroutine()
         {
         }
 
@@ -25,7 +25,7 @@ namespace ETModel
             [DebuggerHidden]
             public void GetResult()
             {
-                throw new InvalidOperationException("ETAvoid cant await, use NoWait method instead!");
+                throw new InvalidOperationException("ETAvoid can not await, use Coroutine method instead!");
             }
 
             [DebuggerHidden]

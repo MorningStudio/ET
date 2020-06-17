@@ -1,13 +1,13 @@
 ﻿using System.IO;
-using ETModel;
+
 using UnityEditor;
 using UnityEngine;
 
-namespace ETEditor
+namespace ET
 {
     public class GlobalProtoEditor: EditorWindow
     {
-        const string path = @".\Assets\Res\Config\GlobalProto.txt";
+        const string path = @"./Assets/Res/Config/GlobalProto.txt";
 
         private GlobalProto globalProto;
 

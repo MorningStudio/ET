@@ -1,11 +1,11 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Net;
 using System.Net.Sockets;
 using System.Runtime.InteropServices;
 
-namespace ETModel
+namespace ET
 {
 	public struct WaitSendBuffer
 	{
@@ -50,7 +50,7 @@ namespace ETModel
 			this.socket = socket;
 			this.kcp = Kcp.KcpCreate(this.RemoteConn, new IntPtr(this.LocalConn));
 
-            Kcp.KcpSetoutput(this.kcp, KcpOutput);
+			SetOutput();
 			Kcp.KcpNodelay(this.kcp, 1, 10, 1, 1);
 			Kcp.KcpWndsize(this.kcp, 256, 256);
 			Kcp.KcpSetmtu(this.kcp, 470);
@@ -132,7 +132,7 @@ namespace ETModel
 
 		private KService GetService()
 		{
-			return (KService)this.service;
+			return (KService)this.Service;
 		}
 
 		public void HandleConnnect(uint remoteConn)
@@ -145,7 +145,7 @@ namespace ETModel
 			this.RemoteConn = remoteConn;
 
 			this.kcp = Kcp.KcpCreate(this.RemoteConn, new IntPtr(this.LocalConn));
-			Kcp.KcpSetoutput(this.kcp, KcpOutput);
+			SetOutput();
 			Kcp.KcpNodelay(this.kcp, 1, 10, 1, 1);
 			Kcp.KcpWndsize(this.kcp, 256, 256);
 			Kcp.KcpSetmtu(this.kcp, 470);
@@ -250,7 +250,7 @@ namespace ETModel
 					return;
 				}
 				
-				if (timeNow - this.lastRecvTime < 200)
+				if (timeNow - this.lastRecvTime < 500)
 				{
 					return;
 				}
@@ -356,10 +356,6 @@ namespace ETModel
 			}
 		}
 
-		public override void Start()
-		{
-		}
-
 		public void Output(IntPtr bytes, int count)
 		{
 			if (this.IsDisposed)
@@ -387,6 +383,22 @@ namespace ETModel
 				this.OnError(ErrorCode.ERR_SocketCantSend);
 			}
 		}
+		
+#if !ENABLE_IL2CPP
+		private KcpOutput kcpOutput;
+#endif
+
+		public void SetOutput()
+		{
+#if ENABLE_IL2CPP
+			Kcp.KcpSetoutput(this.kcp, KcpOutput);
+#else
+			// 跟上一行一样写法，pc跟linux会出错, 保存防止被GC
+			kcpOutput = KcpOutput;
+			Kcp.KcpSetoutput(this.kcp, kcpOutput);
+#endif
+		}
+
 
 #if ENABLE_IL2CPP
 		[AOT.MonoPInvokeCallback(typeof(KcpOutput))]

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
 
-namespace ETModel
+namespace ET
 {
     /// <summary>
     /// Lightweight unity specified task-like object.
@@ -32,6 +32,10 @@ namespace ETModel
             {
                 awaiter.GetResult();
             }
+        }
+        
+        public void Coroutine()
+        {
         }
 
         [DebuggerHidden]
@@ -163,6 +167,10 @@ namespace ETModel
 
                 return this.awaiter.GetResult();
             }
+        }
+        
+        public void Coroutine()
+        {
         }
 
         [DebuggerHidden]

@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using ETModel;
+
 using MongoDB.Bson;
 using UnityEditor;
 using UnityEngine;
 
-namespace ETEditor
+namespace ET
 {
 	public class ServerManagerEditor: EditorWindow
 	{
@@ -43,7 +43,7 @@ namespace ETEditor
 					return;
 				}
 
-				ReloadAsync(this.managerAddress, this.account, this.password).NoAwait();
+				ReloadAsync(this.managerAddress, this.account, this.password).Coroutine();
 			}
 			
 			GUILayout.EndHorizontal();

@@ -4,7 +4,7 @@ using System.Net;
 using System.Net.WebSockets;
 using Microsoft.IO;
 
-namespace ETModel
+namespace ET
 {
     public class WService: AService
     {
@@ -20,7 +20,7 @@ namespace ETModel
             
             this.httpListener = new HttpListener();
 
-            StartAccept(prefixs).NoAwait();
+            StartAccept(prefixs).Coroutine();
         }
         
         public WService()
@@ -44,7 +44,7 @@ namespace ETModel
 			ClientWebSocket webSocket = new ClientWebSocket();
             WChannel channel = new WChannel(webSocket, this);
             this.channels[channel.Id] = channel;
-            channel.ConnectAsync(address).NoAwait();
+            channel.ConnectAsync(address).Coroutine();
             return channel;
         }
 
